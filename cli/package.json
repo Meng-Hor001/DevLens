@@ -4,7 +4,8 @@
   "description": "Local repository analysis CLI",
   "type": "module",
   "bin": {
-    "devlens": "dist/index.js"
+    "devlens": "dist/index.js",
+    "devlen": "dist/index.js"
   },
   "files": [
     "dist",

@@ -12,7 +12,7 @@ function Install-DevLens {
     # npm 12 blocks remote tarballs by default; allow the requested root package.
     & npm.cmd install --global --allow-remote=root --prefix $installDir $packageUrl
     if ($LASTEXITCODE -ne 0) { throw 'DevLens installation failed.' }
-    & (Join-Path $installDir 'devlens.cmd') --version
+    & (Join-Path $installDir 'devlen.cmd') --version
     if ($LASTEXITCODE -ne 0) { throw 'DevLens verification failed.' }
 
     $userPath = [string][Environment]::GetEnvironmentVariable('Path', 'User')
@@ -20,7 +20,7 @@ function Install-DevLens {
         [Environment]::SetEnvironmentVariable('Path', ($userPath.TrimEnd(';') + ';' + $installDir).TrimStart(';'), 'User')
     }
     if (($env:Path -split ';') -notcontains $installDir) { $env:Path = "$installDir;$env:Path" }
-    Write-Host 'DevLens installed. Run: devlens.cmd .'
+    Write-Host 'DevLens installed. Run: devlen.cmd .'
     Write-Host 'New terminals will also have DevLens on PATH.'
 }
 

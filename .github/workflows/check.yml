@@ -27,6 +27,8 @@ jobs:
       - name: Install and verify packaged CLI
         run: |
           npm install --global ./${{ env.DEVLENS_ARCHIVE }}
+          devlen --version
+          devlen --help
           devlens --version
           devlens --help
       - name: Test Unix installer
@@ -43,4 +45,5 @@ jobs:
         shell: pwsh
         run: |
           & ./scripts/install.ps1
+          devlen.cmd --help
           devlens.cmd --help

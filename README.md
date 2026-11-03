@@ -1,5 +1,7 @@
 # DevLens CLI
 
+After installation, run `devlen .` inside your project to open the terminal UI with options **1 Overview**, **2 Dependencies**, **3 Graph**, and **4 Search**. `devlens .` remains supported. On Windows PowerShell, use `devlen.cmd .` if script execution policy blocks `devlen`. For the browser UI, run `devlen . --web`.
+
 DevLens v0.2 scans a local repository, opens an interactive terminal dashboard, and optionally exports a validated project graph. Runs on Windows, Linux and macOS with Node.js 20+. Building from source also requires pnpm.
 
 ## Run locally

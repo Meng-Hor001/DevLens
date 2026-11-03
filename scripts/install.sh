@@ -17,10 +17,10 @@ install_devlens() {
   mkdir -p "$devlens_prefix"
   # npm 12 blocks remote tarballs by default; allow the requested root package.
   npm install --global --allow-remote=root --prefix "$devlens_prefix" "$devlens_package" || return 1
-  "$devlens_prefix/bin/devlens" --version || return 1
+  "$devlens_prefix/bin/devlen" --version || return 1
   printf '\nDevLens installed in %s/bin\n' "$devlens_prefix"
   case ":$PATH:" in
-    *":$devlens_prefix/bin:"*) printf 'Run: devlens .\n' ;;
+    *":$devlens_prefix/bin:"*) printf 'Run: devlen .\n' ;;
     *) printf 'Add this directory to PATH in your shell profile, then reopen your terminal:\n%s/bin\n' "$devlens_prefix" ;;
   esac
 }

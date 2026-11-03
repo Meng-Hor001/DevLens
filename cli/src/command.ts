@@ -9,7 +9,8 @@ import { startTerminalDashboard } from './tui.js';
 
 const help = `DevLens 0.2.0 — local repository dashboard
 
-Usage: devlens [directory] [options]
+Usage: devlen [directory] [options]
+       devlens [directory] [options] (alias)
 
 Options:
   -o, --output <file>  Write JSON graph (new file only; no source overwrites)

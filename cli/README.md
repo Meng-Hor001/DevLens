@@ -1,5 +1,7 @@
 # DevLens
 
+After installation, run `devlen .` inside your project to open the terminal UI with options **1 Overview**, **2 Dependencies**, **3 Graph**, and **4 Search**. `devlens .` remains supported. On Windows PowerShell, use `devlen.cmd .` if script execution policy blocks `devlen`. For the browser UI, run `devlen . --web`.
+
 Local repository analysis CLI for Node.js 20+.
 
 Supports Windows, Linux and macOS. Install the provided archive with `npm install --global ./devlens-0.2.0.tgz`.

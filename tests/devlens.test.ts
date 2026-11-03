@@ -197,7 +197,7 @@ describe('CLI', () => {
     return lines.join('\n');
   }
   it('prints help and version, rejects invalid arguments', async () => {
-    expect(await invoke(['--help'])).toContain('Usage: devlens');
+    expect(await invoke(['--help'])).toContain('Usage: devlen [directory] [options]');
     expect((await invoke(['--version'])).trim()).toBe('0.2.0');
     for (const args of [
       ['--port', '0'],
