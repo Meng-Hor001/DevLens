@@ -1,0 +1,6 @@
+packages:
+  - 'packages/*'
+  - 'cli'
+allowBuilds:
+  esbuild: false
+verifyDepsBeforeRun: false

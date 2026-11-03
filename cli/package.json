@@ -1,0 +1,24 @@
+{
+  "name": "devlens",
+  "version": "0.1.0",
+  "description": "Local repository analysis CLI",
+  "type": "module",
+  "bin": {
+    "devlens": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --platform node --target node20 --out-dir dist --no-splitting"
+  },
+  "dependencies": {
+    "zod": "3.25.76",
+    "ts-morph": "26.0.0",
+    "ignore": "5.3.2"
+  }
+}
