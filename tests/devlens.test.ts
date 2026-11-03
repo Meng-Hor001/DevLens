@@ -41,8 +41,9 @@ describe('scanner', () => {
       'binary.dat': Buffer.from([0, 1, 2]), 'large.txt': 'x'.repeat(1024 * 1024 + 1),
       'src/.gitignore': '!keep.tmp\nlocal.ts\n', 'src/keep.tmp': 'keep', 'src/no.tmp': 'skip', 'src/local.ts': 'skip',
     });
-    await symlink(path.join(root, '.env'), path.join(root, 'secret.txt'));
-    await symlink(root, path.join(root, 'loop'));
+    // Windows file symlinks require Developer Mode or elevation; junctions do not.
+    if (process.platform !== 'win32') await symlink(path.join(root, '.env'), path.join(root, 'secret.txt'));
+    await symlink(root, path.join(root, 'loop'), process.platform === 'win32' ? 'junction' : 'dir');
     const result = await scanRepository(root);
     expect(result.files.map(f => f.path).sort()).toEqual(['.gitignore', 'a.ts', 'b.css', 'src/.gitignore', 'src/keep.tmp']);
     expect(JSON.stringify([...result.contents])).not.toContain('SECRET_TOKEN');
@@ -113,6 +114,14 @@ describe('CLI', () => {
     const result = JSON.parse(await readFile(output, 'utf8')); expect(GraphSchema.safeParse(result.graph).success).toBe(true);
     expect(await readFile(path.join(root, 'app.ts'), 'utf8')).toBe('export default 1');
     const before = await readFile(output, 'utf8'); await expect(invoke([root, '-o', output])).rejects.toThrow(); expect(await readFile(output, 'utf8')).toBe(before);
+  });
+  it('supports project and output paths with spaces and portable graph paths', async () => {
+    const root = await fixture({ 'my project/src/main.ts': "import './other';", 'my project/src/other.ts': 'export {};' });
+    const output = path.join(root, 'my graph.json');
+    await invoke([path.join(root, 'my project'), '--output', output]);
+    const result = JSON.parse(await readFile(output, 'utf8'));
+    expect(result.summary.imports).toBe(1);
+    expect(result.graph.nodes.filter((node: { type: string }) => node.type === 'file').map((node: { id: string }) => node.id).sort()).toEqual(['file:src/main.ts', 'file:src/other.ts']);
   });
 });
 

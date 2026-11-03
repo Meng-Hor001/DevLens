@@ -1,0 +1,43 @@
+name: Check
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: pnpm/action-setup@v4
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      - run: pnpm package
+      - name: Install and verify packaged CLI
+        run: |
+          npm install --global ./release/devlens-0.1.0.tgz
+          devlens --version
+          devlens --help
+      - name: Test Unix installer
+        if: runner.os == 'Linux'
+        env:
+          DEVLENS_PACKAGE_URL: ${{ github.workspace }}/release/devlens-0.1.0.tgz
+          DEVLENS_INSTALL_DIR: ${{ runner.temp }}/devlens install
+        run: sh scripts/install.sh
+      - name: Test Windows installer
+        if: runner.os == 'Windows'
+        env:
+          DEVLENS_PACKAGE_URL: ${{ github.workspace }}/release/devlens-0.1.0.tgz
+          DEVLENS_INSTALL_DIR: ${{ runner.temp }}/devlens install
+        shell: pwsh
+        run: |
+          & ./scripts/install.ps1
+          devlens.cmd --help

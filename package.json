@@ -9,7 +9,7 @@
     "test": "vitest run",
     "dev": "pnpm build && node dist/index.js",
     "check": "pnpm typecheck && pnpm build && pnpm test",
-    "package": "pnpm build && mkdir -p release && npm pack ./cli --pack-destination release"
+    "package": "pnpm build && node -e \"require('node:fs').mkdirSync('release', { recursive: true })\" && npm pack ./cli --pack-destination release"
   },
   "keywords": [],
   "author": "",

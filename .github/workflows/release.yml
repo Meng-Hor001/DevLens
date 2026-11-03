@@ -1,0 +1,29 @@
+name: Release CLI
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: pnpm/action-setup@v4
+      - run: pnpm install --frozen-lockfile
+      - name: Check release version
+        run: node -e 'if (process.env.GITHUB_REF_NAME !== "v" + require("./cli/package.json").version) process.exit(1)'
+      - run: pnpm check
+      - run: pnpm package
+      - name: Prepare stable asset name
+        run: node -e 'const fs = require("node:fs"); const version = require("./cli/package.json").version; fs.copyFileSync(`release/devlens-${version}.tgz`, "release/devlens.tgz")'
+      - name: Publish release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" release/devlens.tgz scripts/install.sh scripts/install.ps1 --verify-tag --generate-notes

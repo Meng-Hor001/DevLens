@@ -17,7 +17,7 @@ Options:
 
 Examples:
   devlens .
-  devlens ./my-app --output /tmp/devlens.json
+  devlens ./my-app --output ./devlens.json
 
 No network calls. Environment files and symlinks are excluded.
 The dashboard is not part of v0.1. Without --output, no files are written.`;
