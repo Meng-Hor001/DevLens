@@ -9,7 +9,8 @@ function Install-DevLens {
 
     $installDir = if ($env:DEVLENS_INSTALL_DIR) { $env:DEVLENS_INSTALL_DIR } else { Join-Path $env:LOCALAPPDATA 'DevLens' }
     $packageUrl = if ($env:DEVLENS_PACKAGE_URL) { $env:DEVLENS_PACKAGE_URL } else { 'https://github.com/Meng-Hor001/DevLens/releases/latest/download/devlens.tgz' }
-    & npm.cmd install --global --prefix $installDir $packageUrl
+    # npm 12 blocks remote tarballs by default; allow the requested root package.
+    & npm.cmd install --global --allow-remote=root --prefix $installDir $packageUrl
     if ($LASTEXITCODE -ne 0) { throw 'DevLens installation failed.' }
     & (Join-Path $installDir 'devlens.cmd') --version
     if ($LASTEXITCODE -ne 0) { throw 'DevLens verification failed.' }

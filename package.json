@@ -1,15 +1,17 @@
 {
   "name": "devlens-cli",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Local repository graphs and dependency analysis",
   "main": "index.js",
   "scripts": {
-    "build": "tsup cli/src/index.ts --format esm --platform node --target node20 --out-dir dist --no-splitting && pnpm --filter devlens build",
-    "typecheck": "tsc --noEmit",
+    "build": "pnpm --filter @devlens/web build && tsup cli/src/index.ts --format esm --platform node --target node20 --out-dir dist --no-splitting && pnpm --filter devlens build && node scripts/copy-dashboard.mjs",
+    "typecheck": "tsc --noEmit && pnpm --filter @devlens/web typecheck",
     "test": "vitest run",
     "dev": "pnpm build && node dist/index.js",
-    "check": "pnpm typecheck && pnpm build && pnpm test",
-    "package": "pnpm build && node -e \"require('node:fs').mkdirSync('release', { recursive: true })\" && npm pack ./cli --pack-destination release"
+    "check": "pnpm format:check && pnpm typecheck && pnpm build && pnpm test",
+    "package": "pnpm build && node -e \"require('node:fs').mkdirSync('release', { recursive: true })\" && npm pack ./cli --pack-destination release",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "keywords": [],
   "author": "",
@@ -18,6 +20,7 @@
   "type": "module",
   "devDependencies": {
     "@types/node": "^26.6.6",
+    "prettier": "3.9.10",
     "tsup": "^9.0.0",
     "typescript": "^7.0.2",
     "vitest": "^5.0.5"
@@ -27,8 +30,11 @@
     "node": ">=20"
   },
   "dependencies": {
-    "zod": "3.25.76",
+    "@hono/node-server": "^1.19.0",
+    "hono": "^4.12.0",
+    "ignore": "5.3.2",
+    "open": "^10.2.0",
     "ts-morph": "26.0.0",
-    "ignore": "5.3.2"
+    "zod": "3.25.76"
   }
 }

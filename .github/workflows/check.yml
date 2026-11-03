@@ -1,6 +1,6 @@
 name: Check
 
-on: [push, pull_request]
+on: [push, pull_request, workflow_call]
 
 permissions:
   contents: read
@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -21,21 +21,24 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
       - run: pnpm package
+      - name: Resolve packaged archive
+        shell: bash
+        run: node -e 'const fs = require("node:fs"); const version = require("./cli/package.json").version; fs.appendFileSync(process.env.GITHUB_ENV, "DEVLENS_ARCHIVE=release/devlens-" + version + ".tgz\n")'
       - name: Install and verify packaged CLI
         run: |
-          npm install --global ./release/devlens-0.1.0.tgz
+          npm install --global ./${{ env.DEVLENS_ARCHIVE }}
           devlens --version
           devlens --help
       - name: Test Unix installer
-        if: runner.os == 'Linux'
+        if: runner.os != 'Windows'
         env:
-          DEVLENS_PACKAGE_URL: ${{ github.workspace }}/release/devlens-0.1.0.tgz
+          DEVLENS_PACKAGE_URL: ${{ github.workspace }}/${{ env.DEVLENS_ARCHIVE }}
           DEVLENS_INSTALL_DIR: ${{ runner.temp }}/devlens install
         run: sh scripts/install.sh
       - name: Test Windows installer
         if: runner.os == 'Windows'
         env:
-          DEVLENS_PACKAGE_URL: ${{ github.workspace }}/release/devlens-0.1.0.tgz
+          DEVLENS_PACKAGE_URL: ${{ github.workspace }}/${{ env.DEVLENS_ARCHIVE }}
           DEVLENS_INSTALL_DIR: ${{ runner.temp }}/devlens install
         shell: pwsh
         run: |

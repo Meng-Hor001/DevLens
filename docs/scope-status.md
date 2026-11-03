@@ -1,4 +1,6 @@
-# Scope completion — 2026-11-03
+# v0.1 scope completion — 2026-11-03
+
+Historical v0.1 report. The new Local Dashboard UI scope supersedes the roadmap below. See [v0.2 status](scope-v0.2-status.md) for the current implementation and outstanding verification.
 
 Source: `/home/menghor/Documents/DevLens CLI Scope.pdf`, v0.1 requirements and eight-step implementation order. This assessment covers the “build now” milestone; later versions are explicitly deferred in the scope.
 
@@ -10,25 +12,25 @@ This review extracted a callable CLI command so argument handling/export behavio
 
 ## Required steps
 
-| Step | Requirement | Status | Evidence |
-| --- | --- | --- | --- |
-| 1 | Core types and graph helpers, FR-07 | Complete | Zod schemas, valid endpoint/type checks, deduplication, neighbors and counts; automated tests |
-| 2 | Scanner and ignore rules, FR-01 | Complete | Nested ignores, excluded directories, secrets, symlinks, binary and size exclusions; automated tests and four real scans |
-| 3 | Languages, FR-02 | Complete | Ranked file-count percentages; fixture checks and independently counted TypeScript extensions on real graphs |
-| 4 | Frameworks/dependencies, FR-03/04 | Complete | Config/manifest detection, sections, versions, categories; real dependency totals matched manifest entries |
-| 5 | Imports with ts-morph, FR-05 | Complete | Static imports, re-exports, require, dynamic imports, aliases/inheritance; known layout imports verified on four projects |
-| 6 | CLI summary/options/errors, FR-13 | Complete | Direct command tests plus built binary help/version and nonzero failure exit checks |
-| 7 | JSON export, FR-13 | Complete | Four CLI exports parsed; endpoint validation and Zod graph checks; overwrite protection tested |
-| 8 | Test 3–5 real Next.js projects | Complete | Four existing local projects tested, detailed below |
+| Step | Requirement                         | Status   | Evidence                                                                                                                  |
+| ---- | ----------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------- |
+| 1    | Core types and graph helpers, FR-07 | Complete | Zod schemas, valid endpoint/type checks, deduplication, neighbors and counts; automated tests                             |
+| 2    | Scanner and ignore rules, FR-01     | Complete | Nested ignores, excluded directories, secrets, symlinks, binary and size exclusions; automated tests and four real scans  |
+| 3    | Languages, FR-02                    | Complete | Ranked file-count percentages; fixture checks and independently counted TypeScript extensions on real graphs              |
+| 4    | Frameworks/dependencies, FR-03/04   | Complete | Config/manifest detection, sections, versions, categories; real dependency totals matched manifest entries                |
+| 5    | Imports with ts-morph, FR-05        | Complete | Static imports, re-exports, require, dynamic imports, aliases/inheritance; known layout imports verified on four projects |
+| 6    | CLI summary/options/errors, FR-13   | Complete | Direct command tests plus built binary help/version and nonzero failure exit checks                                       |
+| 7    | JSON export, FR-13                  | Complete | Four CLI exports parsed; endpoint validation and Zod graph checks; overwrite protection tested                            |
+| 8    | Test 3–5 real Next.js projects      | Complete | Four existing local projects tested, detailed below                                                                       |
 
 ## Real-project acceptance
 
-| Project | Git tracked paths | Scanned text files | Dependency declarations | Internal import edges | Warnings |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| psardigital-admin | 179 | 173 | 27 | 351 | 0 |
-| qubase-admin | 163 | 147 | 31 | 295 | 0 |
-| psardigital-ui | 385 | 335 | 39 | 586 | 0 |
-| qubase-frontend | 491 | 432 | 62 | 850 | 9 |
+| Project           | Git tracked paths | Scanned text files | Dependency declarations | Internal import edges | Warnings |
+| ----------------- | ----------------: | -----------------: | ----------------------: | --------------------: | -------: |
+| psardigital-admin |               179 |                173 |                      27 |                   351 |        0 |
+| qubase-admin      |               163 |                147 |                      31 |                   295 |        0 |
+| psardigital-ui    |               385 |                335 |                      39 |                   586 |        0 |
+| qubase-frontend   |               491 |                432 |                      62 |                   850 |        9 |
 
 All four detected Next.js, React, Redux and Tailwind CSS. Qubase frontend additionally detected Docker and Prisma. Git tracked paths are a rough comparison, not an expected equality: git counts binary/ignored tracked files, while DevLens excludes ineligible files and can include eligible untracked files.
 

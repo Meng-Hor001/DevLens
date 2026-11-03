@@ -8,7 +8,12 @@ permissions:
   contents: write
 
 jobs:
+  verify:
+    uses: ./.github/workflows/check.yml
+    permissions:
+      contents: read
   release:
+    needs: verify
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

@@ -15,7 +15,8 @@ install_devlens() {
   devlens_prefix="${DEVLENS_INSTALL_DIR:-$HOME/.local}"
   devlens_package="${DEVLENS_PACKAGE_URL:-https://github.com/Meng-Hor001/DevLens/releases/latest/download/devlens.tgz}"
   mkdir -p "$devlens_prefix"
-  npm install --global --prefix "$devlens_prefix" "$devlens_package" || return 1
+  # npm 12 blocks remote tarballs by default; allow the requested root package.
+  npm install --global --allow-remote=root --prefix "$devlens_prefix" "$devlens_package" || return 1
   "$devlens_prefix/bin/devlens" --version || return 1
   printf '\nDevLens installed in %s/bin\n' "$devlens_prefix"
   case ":$PATH:" in
