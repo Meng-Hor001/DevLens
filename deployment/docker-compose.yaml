@@ -1,0 +1,24 @@
+services:
+  devlen-postgres:
+    container_name: devlen
+    image: postgres:18.4
+    restart: unless-stopped
+    ports:
+      - "9543:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: devlen_db
+    volumes:
+      - ite-pg-vol:/var/lib/postgresql/18/docker
+      - ./init_db:/docker-entrypoint-initdb.d
+    networks:
+      - ite-net
+
+volumes:
+  ite-pg-vol:
+    driver: local
+
+networks:
+  ite-net:
+    external: true
